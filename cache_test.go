@@ -1,19 +1,21 @@
 package intubate
 
-import "testing"
+import (
+	"strconv"
+	"testing"
+)
 
 func TestSafeCache(t *testing.T) {
-	url := "https://github.com"
-	cache := SafeCache{v: make(map[string]bool)}
+	cache := NewCache()
 
-	t.Run("set cache to true", func(t *testing.T) {
-		want := true
-		cache.Set(url, want)
+	for i := 0; i < 10; i++ {
+		cache.Set(strconv.Itoa(i), i)
+	}
 
-		got := cache.Get(url)
+	want := 4
+	got := cache.Get("4")
 
-		if got != want {
-			t.Fatalf("want %t, got %t", want, got)
-		}
-	})
+	if got.(int) != want {
+		t.Fatalf("want %d, got %d", want, got)
+	}
 }
